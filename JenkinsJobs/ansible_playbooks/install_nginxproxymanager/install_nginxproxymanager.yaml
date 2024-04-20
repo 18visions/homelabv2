@@ -1,0 +1,66 @@
+---
+- name: Install and Configure Nginx Proxy Manager
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+        dest: "/usr/local/bin/docker-compose"
+        mode: 'u+x,g+x'
+
+    - name: Ensure docker service is running
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create directories for Nginx Proxy Manager
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "/opt/nginx-proxy-manager"
+        - "/opt/nginx-proxy-manager/data"
+        - "/opt/nginx-proxy-manager/letsencrypt"
+        - "/opt/nginx-proxy-manager/config"
+
+    - name: Add docker-compose file for Nginx Proxy Manager
+      copy:
+        dest: "/opt/nginx-proxy-manager/docker-compose.yml"
+        content: |
+          version: '3'
+          services:
+            app:
+              image: 'jc21/nginx-proxy-manager:latest'
+              restart: always
+              ports:
+                - '80:80'
+                - '81:81'
+                - '443:443'
+              environment:
+                DB_SQLITE_FILE: "/data/database.sqlite"
+              volumes:
+                - ./data:/data
+                - ./letsencrypt:/etc/letsencrypt
+          volumes:
+            data:
+            letsencrypt:
+      notify:
+        - Start Nginx Proxy Manager
+
+  handlers:
+    - name: Start Nginx Proxy Manager
+      docker_compose:
+        project_src: "/opt/nginx-proxy-manager"
+        state: present
+        restarted: yes
