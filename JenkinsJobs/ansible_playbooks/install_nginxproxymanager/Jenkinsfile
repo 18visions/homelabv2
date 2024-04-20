@@ -12,6 +12,11 @@ pipeline {
                 git 'https://github.com/18visions/homelabv2.git'
             }
         }
+        stage('List Files') {
+            steps {
+                sh 'ls -lah'
+            }
+        }
         stage('Deploy') {
             steps {
                 sshagent(['ansible_ssh']) {
