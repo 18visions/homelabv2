@@ -23,7 +23,7 @@ pipeline {
                     script {
                         // Run Ansible playbook
                         ansiblePlaybook(
-                            playbook: 'JenkinsJobs/ansible_playbooks/install_nginxproxymanager.yaml',
+                            playbook: 'JenkinsJobs/ansible_playbooks/install_nginxproxymanager/install_nginxproxymanager.yaml',
                             inventory: "${params.HOST_IP},",
                             extraVars: [
                                 ansible_user: 'nick.turner82@gmail.com'
