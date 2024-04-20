@@ -26,7 +26,7 @@ pipeline {
                             playbook: 'JenkinsJobs/ansible_playbooks/install_nginxproxymanager/install_nginxproxymanager.yaml',
                             inventory: "${params.HOST_IP},",
                             extraVars: [
-                                ansible_user: 'nick.turner82@gmail.com'
+                                ansible_user: 'nick'
                             ],
                             disableHostKeyChecking: true
                         )
