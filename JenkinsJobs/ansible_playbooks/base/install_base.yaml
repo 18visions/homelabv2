@@ -1,0 +1,20 @@
+---
+- name: Install common tools
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600  # Cache validity in seconds
+
+    - name: Install packages
+      ansible.builtin.apt:
+        name:
+          - net-tools
+          - nano
+          - htop
+          - python3-pip
+          - curl
+        state: present
