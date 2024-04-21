@@ -1,0 +1,60 @@
+---
+- name: Setup NFS on Ubuntu
+  hosts: nfs_server
+  become: true
+  tasks:
+
+    - name: Install NFS packages
+      apt:
+        name:
+          - nfs-kernel-server
+          - nfs-common
+        state: present
+        update_cache: yes
+
+    - name: Ensure NFS is enabled and running
+      systemd:
+        name: nfs-kernel-server
+        enabled: yes
+        state: started
+
+    - name: Create base directory for NFS exports
+      file:
+        path: "/exports"
+        state: directory
+        owner: "root"
+        group: "root"
+        mode: "0755"
+
+    - name: Create directories for services and set permissions
+      file:
+        path: "/exports/{{ item }}"
+        state: directory
+        owner: "nobody"
+        group: "nogroup"
+        mode: "0777"
+      with_items:
+        - argocd
+        - traefik
+        - prometheus
+        - grafana
+        - awx
+        - homepage
+
+    - name: Export the directories for NFS access
+      blockinfile:
+        path: /etc/exports
+        block: |
+          /exports/argocd *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/traefik *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/prometheus *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/grafana *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/awx *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/homepage *(rw,sync,no_subtree_check,no_root_squash)
+        create: yes
+        backup: yes
+
+    - name: Restart NFS to apply export changes
+      systemd:
+        name: nfs-kernel-server
+        state: restarted
