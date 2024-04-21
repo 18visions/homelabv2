@@ -1,6 +1,6 @@
 ---
 - name: Setup NFS on Ubuntu
-  hosts: nfs_server
+  hosts: all
   become: true
   tasks:
 
