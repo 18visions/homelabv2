@@ -1,6 +1,6 @@
 ---
 - name: Uninstall k3s from all nodes
-  hosts: k3s_cluster
+  hosts: all
   become: yes
   tasks:
     - name: Ensure k3s is uninstalled
