@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'HOST_IP', defaultValue: '192.168.1.1', description: 'IP address of the target host')
+    }
+    environment {
+        ANSIBLE_HOST_KEY_CHECKING = "False"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/18visions/homelabv2.git'
+            }
+        }
+        stage('List Files') {
+            steps {
+                sh 'ls -lah'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sshagent(['ansible_ssh']) {
+                    script {
+                        // Run Ansible playbook
+                        ansiblePlaybook(
+                            playbook: 'JenkinsJobs/ansible_playbooks/install_base/install_base.yaml',
+                            inventory: "${params.HOST_IP},",
+                            extraVars: [
+                                ansible_user: 'nick'
+                            ],
+                            disableHostKeyChecking: true
+                        )
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Deployment completed successfully.'
+        }
+        failure {
+            echo 'Deployment failed.'
+        }
+    }
+}
