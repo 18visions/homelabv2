@@ -20,8 +20,8 @@
       register: k3s_token
       changed_when: false
 
-    - name: Install K3s on Worker Nodes with Traefik Disabled
+    - name: Install K3s on Worker Nodes
       command: >
         sh /tmp/install-k3s.sh agent --server https://{{ hostvars['control1']['ansible_host'] }}:6443
-        --token {{ hostvars['control1']['k3s_token'].stdout }} --disable traefik
+        --token {{ hostvars['control1']['k3s_token'].stdout }}
       when: inventory_hostname in groups['k3s_workers']
