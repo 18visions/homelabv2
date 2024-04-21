@@ -9,8 +9,8 @@
         dest: /tmp/install-k3s.sh
         mode: '0755'
 
-    - name: Install K3s on Control Plane
-      command: sh /tmp/install-k3s.sh
+    - name: Install K3s on Control Plane with Traefik Disabled
+      command: sh /tmp/install-k3s.sh --disable traefik
       when: inventory_hostname in groups['k3s_control']
       register: k3s_installation
 
@@ -20,8 +20,8 @@
       register: k3s_token
       changed_when: false
 
-    - name: Install K3s on Worker Nodes
+    - name: Install K3s on Worker Nodes with Traefik Disabled
       command: >
         sh /tmp/install-k3s.sh agent --server https://{{ hostvars['control1']['ansible_host'] }}:6443
-        --token {{ hostvars['control1']['k3s_token'].stdout }}
+        --token {{ hostvars['control1']['k3s_token'].stdout }} --disable traefik
       when: inventory_hostname in groups['k3s_workers']
