@@ -1,7 +1,7 @@
 ---
 - name: Setup HAProxy on Ubuntu
   hosts: all
-  become: true
+  become: yes
   tasks:
     - name: Ensure HAProxy group exists
       ansible.builtin.group:
