@@ -1,0 +1,66 @@
+- name: Setup HAProxy on Ubuntu
+  block:
+    - name: Ensure HAProxy group exists
+      ansible.builtin.group:
+        name: haproxy
+        state: present
+        system: yes
+
+    - name: Ensure HAProxy user exists
+      ansible.builtin.user:
+        name: haproxy
+        group: haproxy
+        home: /var/lib/haproxy
+        shell: /bin/false
+        system: yes
+        create_home: yes
+
+    - name: Install HAProxy
+      ansible.builtin.apt:
+        name: haproxy
+        state: present
+        update_cache: yes
+
+    - name: Create HAProxy directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: haproxy
+        group: haproxy
+        mode: '0750'
+      loop:
+        - /var/lib/haproxy
+        - /etc/haproxy/certs
+
+    - name: Deploy HAProxy configuration file
+      ansible.builtin.copy:
+        src: files/haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart haproxy
+
+    - name: Modify HAProxy service to run as haproxy user
+      ansible.builtin.lineinfile:
+        path: /etc/systemd/system/multi-user.target.wants/haproxy.service
+        regexp: '^User='
+        line: 'User=haproxy'
+        state: present
+      notify: restart haproxy
+
+    - name: Modify HAProxy service to run as haproxy group
+      ansible.builtin.lineinfile:
+        path: /etc/systemd/system/multi-user.target.wants/haproxy.service
+        regexp: '^Group='
+        line: 'Group=haproxy'
+        state: present
+      notify: restart haproxy
+
+  handlers:
+    - name: restart haproxy
+      ansible.builtin.systemd:
+        name: haproxy
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
