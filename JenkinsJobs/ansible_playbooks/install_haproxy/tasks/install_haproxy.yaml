@@ -1,11 +1,13 @@
+---
 - name: Setup HAProxy on Ubuntu
-  block:
+  hosts: all
+  become: true
+  tasks:
     - name: Ensure HAProxy group exists
       ansible.builtin.group:
         name: haproxy
         state: present
         system: yes
-
     - name: Ensure HAProxy user exists
       ansible.builtin.user:
         name: haproxy
@@ -14,13 +16,11 @@
         shell: /bin/false
         system: yes
         create_home: yes
-
     - name: Install HAProxy
       ansible.builtin.apt:
         name: haproxy
         state: present
         update_cache: yes
-
     - name: Create HAProxy directories
       ansible.builtin.file:
         path: "{{ item }}"
@@ -31,7 +31,6 @@
       loop:
         - /var/lib/haproxy
         - /etc/haproxy/certs
-
     - name: Deploy HAProxy configuration file
       ansible.builtin.copy:
         src: files/haproxy.cfg
@@ -40,7 +39,6 @@
         group: root
         mode: '0644'
       notify: restart haproxy
-
     - name: Modify HAProxy service to run as haproxy user
       ansible.builtin.lineinfile:
         path: /etc/systemd/system/multi-user.target.wants/haproxy.service
@@ -48,7 +46,6 @@
         line: 'User=haproxy'
         state: present
       notify: restart haproxy
-
     - name: Modify HAProxy service to run as haproxy group
       ansible.builtin.lineinfile:
         path: /etc/systemd/system/multi-user.target.wants/haproxy.service
