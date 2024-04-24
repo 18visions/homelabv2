@@ -1,7 +1,7 @@
 ---
 - name: deploy Docker Compose stack - portainer
   community.docker.docker_compose:
-    project_src: /home/nick/docker-compose/dockercompose/portainer
+    project_src: /home/nick/docker-compose/portainer
     files:
     - docker-compose.yml
 #- name: deploy Docker Compose stack - jenkins
@@ -21,7 +21,7 @@
 #    - docker-compose.yml
 - name: deploy Docker Compose stack - elk
   community.docker.docker_compose:
-    project_src: /home/nick/docker-compose/dockercompose/elk
+    project_src: /home/nick/docker-compose/elk
     files:
     - docker-compose.yml
 #- name: deploy Docker Compose stack - heimdall
@@ -31,17 +31,17 @@
 #    - docker-compose.yml
 - name: deploy Docker Compose stack - jupyter
   community.docker.docker_compose:
-    project_src: /home/nick/docker-compose/dockercompose/jupyter
+    project_src: /home/nick/docker-compose/jupyter
     files:
     - docker-compose.yml
 - name: deploy Docker Compose stack - influxdb
   community.docker.docker_compose:
-    project_src: /home/nick/docker-compose/dockercompose/influxdb
+    project_src: /home/nick/docker-compose/influxdb
     files:
     - docker-compose.yml
 - name: deploy Docker Compose stack - traefik
   community.docker.docker_compose:
-    project_src: /home/nick/docker-compose/dockercompose/traefik
+    project_src: /home/nick/docker-compose/traefik
     files:
     - docker-compose.yml
 
