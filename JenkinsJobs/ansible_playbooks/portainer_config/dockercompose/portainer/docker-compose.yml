@@ -1,0 +1,20 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:alpine
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "9000:9000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer_data:/data"
+      - "/home/nicholas/github/homelab/dockercompose:/data/compose"
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "portainer"
+    restart: always
+
+volumes:
+  portainer_data:

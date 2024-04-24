@@ -1,0 +1,61 @@
+- name: Create node_exporter group
+  ansible.builtin.group:
+    name: node_exporter
+    state: present
+
+- name: Create node_exporter user
+  ansible.builtin.user:
+    name: node_exporter
+    group: node_exporter
+    system: true
+    create_home: false
+
+- name: Check if node exporter already in /usr/local/bin
+  stat: path=/usr/local/bin/node_exporter
+  register: node_exporter_stat
+
+- name: Download node exporter package
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+    dest: /tmp
+    force: false
+  when: not node_exporter_stat.stat.exists
+
+- name: Extract node_exporter-1.6.1.linux-amd64.tar.gz into /tmp
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: /tmp/node_exporter-1.6.1.linux-amd64.tar.gz
+    dest: /tmp/
+  when: not node_exporter_stat.stat.exists
+
+- name: Move node_exporter to /usr/local/bin
+  command: mv /tmp/node_exporter-1.6.1.linux-amd64/node_exporter /usr/local/bin/
+  when: not node_exporter_stat.stat.exists
+
+#- name: Copy node exporter dir with owner and permissions
+#  ansible.builtin.copy:
+#    remote_src: true
+#    src: /tmp/node_exporter-1.6.1.linux-amd64/node_exporter/
+#    dest: /usr/local/bin/
+#    owner: node_exporter
+#    group: node_exporter
+#    mode: '0644'
+
+- name: Check if service file exists
+  stat: path=/tmp/node_exporter-1.6.1.linux-amd64/node_exporter
+  register: node_exporter_service_stat
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/
+    owner: node_exporter
+    group: node_exporter
+    mode: '0644'
+  when: not node_exporter_service_stat.stat.exists
+
+- name: Start service node, if not started and enable
+  ansible.builtin.service:
+    name: node_exporter
+    state: started
+    enabled: true

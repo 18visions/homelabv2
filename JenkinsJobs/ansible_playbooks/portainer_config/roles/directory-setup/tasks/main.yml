@@ -1,0 +1,12 @@
+---
+- name: Creates /home/nick/docker-compose/ directory
+  file:
+    path: /home/nick/docker-compose/
+    state: directory
+    mode: '0755'
+- name: Copy dockercompose dir
+  ansible.builtin.copy:
+      src: /homelabv2/JenkinsJobs/ansible_playbooks/portainer_config/dockercompose
+      dest: /home/nick/docker-compose/
+      follow: yes
+  become: true

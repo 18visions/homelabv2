@@ -1,0 +1,41 @@
+---
+- name: deploy Docker Compose stack - portainer
+  community.docker.docker_compose:
+    project_src: /home/nick/docker-compose/dockercompose/portainer
+    files:
+    - docker-compose.yml
+#- name: deploy Docker Compose stack - jenkins
+#  community.docker.docker_compose:
+#    project_src: /home/nick/docker-compose/dockercompose/jenkins
+#    files:
+#    - docker-compose.yml
+#- name: deploy Docker Compose stack - prometheus-grafana
+#  community.docker.docker_compose:
+#    project_src: /home/nick/docker-compose/dockercompose/prometheus-grafana
+#    files:
+#    - docker-compose.yml
+#- name: deploy Docker Compose stack - pihole
+#  community.docker.docker_compose:
+#    project_src: /home/nick/docker-compose/dockercompose/pihole
+#    files:
+#    - docker-compose.yml
+- name: deploy Docker Compose stack - elk
+  community.docker.docker_compose:
+    project_src: /home/nick/docker-compose/dockercompose/elk
+    files:
+    - docker-compose.yml
+#- name: deploy Docker Compose stack - heimdall
+#  community.docker.docker_compose:
+#    project_src: /home/nick/docker-compose/dockercompose/heimdall
+#    files:
+#    - docker-compose.yml
+- name: deploy Docker Compose stack - jupyter
+  community.docker.docker_compose:
+    project_src: /home/nick/docker-compose/dockercompose/jupyter
+    files:
+    - docker-compose.yml
+- name: deploy Docker Compose stack - influxdb
+  community.docker.docker_compose:
+    project_src: /home/nick/docker-compose/dockercompose/influxdb
+    files:
+    - docker-compose.yml

@@ -1,0 +1,10 @@
+---
+- name: Install elk, portainer, jupyter, influxdb
+  hosts: all
+  become: yes
+
+  roles:
+    - packages
+    - directory-setup
+    - docker-compose
+    - blackbox-exporter-setup

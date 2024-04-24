@@ -1,0 +1,11 @@
+version: '3'
+services:
+  jupyter:
+    image: jupyter/minimal-notebook
+    volumes:
+      - jupyter-data:/data
+    ports:
+      - 8888:8888
+    container_name: jupyter_notebook
+volumes:
+  jupyter-data:
