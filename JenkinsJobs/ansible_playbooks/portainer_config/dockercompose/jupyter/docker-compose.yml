@@ -7,5 +7,13 @@ services:
     ports:
       - 8888:8888
     container_name: jupyter_notebook
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jupyter.rule=Host(`jupyter.homelab.local`)"
+      - "traefik.http.services.jupyter.loadbalancer.server.port=8888"
+      - "traefik.http.routers.jupyter.entrypoints=web"
+      - "traefik.http.routers.jupyter.middlewares=jupyter-stripprefix"
+      - "traefik.http.middlewares.jupyter-stripprefix.stripprefix.prefixes=/jupyter"
 volumes:
   jupyter-data:

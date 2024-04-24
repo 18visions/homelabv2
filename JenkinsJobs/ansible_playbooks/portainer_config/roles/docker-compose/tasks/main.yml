@@ -39,3 +39,9 @@
     project_src: /home/nick/docker-compose/dockercompose/influxdb
     files:
     - docker-compose.yml
+- name: deploy Docker Compose stack - traefik
+  community.docker.docker_compose:
+    project_src: /home/nick/docker-compose/dockercompose/traefik
+    files:
+    - docker-compose.yml
+

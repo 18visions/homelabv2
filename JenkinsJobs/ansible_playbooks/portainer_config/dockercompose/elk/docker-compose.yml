@@ -32,6 +32,13 @@ services:
     networks: 
       - logging-network
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kibana.rule=Host(`kibana.homelab.local`)"
+      - "traefik.http.services.kibana.loadbalancer.server.port=5601"
+      - "traefik.http.routers.kibana.entrypoints=web"
+      - "traefik.http.routers.kibana.middlewares=kibana-stripprefix"
+      - "traefik.http.middlewares.kibana-stripprefix.stripprefix.prefixes=/kibana"
 
 networks: 
   logging-network:
