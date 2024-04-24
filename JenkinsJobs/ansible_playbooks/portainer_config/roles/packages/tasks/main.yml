@@ -25,3 +25,8 @@
 - name: Install docker python package
   ansible.builtin.pip:
     name: docker-compose
+- name: Ensure Docker service is running and enabled
+  service:
+    name: docker
+    state: started
+    enabled: yes
