@@ -9,6 +9,7 @@ services:
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks: 
       - logging-network
+    mem_limit: 4g
     restart: always
 
   logstash:
