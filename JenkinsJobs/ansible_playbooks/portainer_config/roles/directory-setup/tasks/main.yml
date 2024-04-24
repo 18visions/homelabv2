@@ -6,7 +6,7 @@
     mode: '0755'
 - name: Copy dockercompose dir
   ansible.builtin.copy:
-      src: /JenkinsJobs/ansible_playbooks/portainer_config/dockercompose
+      src: JenkinsJobs/ansible_playbooks/portainer_config/dockercompose
       dest: /home/nick/docker-compose/
       follow: yes
   become: true
