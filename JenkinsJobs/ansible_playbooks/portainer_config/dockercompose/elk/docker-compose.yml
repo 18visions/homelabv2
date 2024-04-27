@@ -3,6 +3,8 @@ version: "3"
 services: 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    networks:
+      - homelab
     environment: 
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -31,6 +33,7 @@ services:
     ports: 
       - 5601:5601
     networks: 
+      - homelab
       - logging-network
     restart: always
     labels:
@@ -41,6 +44,8 @@ services:
       - "traefik.http.routers.kibana.middlewares=kibana-stripprefix"
       - "traefik.http.middlewares.kibana-stripprefix.stripprefix.prefixes=/kibana"
 
-networks: 
+networks:
+  homelab:
+    external: true
   logging-network:
     driver: bridge

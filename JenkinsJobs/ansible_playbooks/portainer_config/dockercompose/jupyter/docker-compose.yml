@@ -2,6 +2,8 @@ version: '3'
 services:
   jupyter:
     image: jupyter/minimal-notebook
+    networks:
+      - homelab
     volumes:
       - jupyter-data:/data
     ports:
@@ -17,3 +19,6 @@ services:
       - "traefik.http.middlewares.jupyter-stripprefix.stripprefix.prefixes=/jupyter"
 volumes:
   jupyter-data:
+networks:
+  homelab:
+    external: true
