@@ -3,9 +3,6 @@
   community.docker.docker_network:
     name: homelab
     state: present
-    ipam_config:
-      - subnet: '10.7.1.0/24'
-      - gateway: '10.7.1.0'
 - name: deploy Docker Compose stack - portainer
   community.docker.docker_compose:
     project_src: /home/nick/docker-compose/portainer
