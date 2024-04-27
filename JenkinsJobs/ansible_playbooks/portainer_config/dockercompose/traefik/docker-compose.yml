@@ -5,6 +5,8 @@ services:
   traefik:
     container_name: traefik
     image: traefik:v2.4
+    networks:
+      - homelab
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -15,3 +17,6 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     restart: always
+networks:
+  homelab:
+    external: true

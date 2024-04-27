@@ -1,6 +1,8 @@
 services:
   portainer:
     image: portainer/portainer-ce:alpine
+    networks:
+      - homelab
     container_name: portainer
     command: -H unix:///var/run/docker.sock
     ports:
@@ -25,3 +27,7 @@ services:
 
 volumes:
   portainer_data:
+
+networks:
+  homelab:
+    external: true
