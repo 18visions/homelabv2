@@ -9,7 +9,6 @@ services:
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks: 
       - homelab
-      - logging-network
     mem_limit: 4g
     restart: always
 
@@ -22,7 +21,6 @@ services:
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro 
     networks:
-      - logging-network
       - homelab
     restart: always
 
@@ -34,7 +32,6 @@ services:
       - 5601:5601
     networks: 
       - homelab
-      - logging-network
     restart: always
     labels:
       - "traefik.enable=true"
@@ -47,5 +44,3 @@ services:
 networks:
   homelab:
     external: true
-  logging-network:
-    driver: bridge
