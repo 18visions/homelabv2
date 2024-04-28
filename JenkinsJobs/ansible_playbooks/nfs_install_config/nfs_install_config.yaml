@@ -41,6 +41,7 @@
         - awx
         - homepage
         - nginx
+        - openproject
 
     - name: Export the directories for NFS access
       blockinfile:
@@ -53,6 +54,7 @@
           /exports/awx *(rw,sync,no_subtree_check,no_root_squash)
           /exports/homepage *(rw,sync,no_subtree_check,no_root_squash)
           /exports/nginx *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/openproject *(rw,sync,no_subtree_check,no_root_squash)
         create: yes
         backup: yes
 
