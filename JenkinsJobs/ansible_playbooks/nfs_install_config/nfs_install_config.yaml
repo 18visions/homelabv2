@@ -42,6 +42,7 @@
         - homepage
         - nginx
         - openproject
+        - blackbox-exporter
 
     - name: Export the directories for NFS access
       blockinfile:
@@ -55,6 +56,7 @@
           /exports/homepage *(rw,sync,no_subtree_check,no_root_squash)
           /exports/nginx *(rw,sync,no_subtree_check,no_root_squash)
           /exports/openproject *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/blackbox-exporter *(rw,sync,no_subtree_check,no_root_squash)
         create: yes
         backup: yes
 
