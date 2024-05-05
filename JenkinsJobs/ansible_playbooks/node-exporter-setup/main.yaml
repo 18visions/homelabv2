@@ -4,4 +4,4 @@
   become: yes
 
   roles:
-    - node-exporter-setup
+    - node-exporter
