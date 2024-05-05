@@ -23,7 +23,7 @@ pipeline {
                     script {
                         // Run Ansible playbook
                         ansiblePlaybook(
-                            playbook: 'JenkinsJobs/ansible_playbooks/node-exporter-setup/node-exporter-setup.yaml',
+                            playbook: 'JenkinsJobs/ansible_playbooks/node-exporter-setup/main.yaml',
                             inventory: "${params.HOST_IP},",
                             extraVars: [
                                 ansible_user: 'nick'
