@@ -9,6 +9,11 @@
         update_cache: yes
         cache_valid_time: 3600  # Cache validity in seconds
 
+    - name: Upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
+
     - name: Install packages
       ansible.builtin.apt:
         name:
