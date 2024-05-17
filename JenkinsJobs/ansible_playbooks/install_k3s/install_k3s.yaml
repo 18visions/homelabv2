@@ -9,8 +9,8 @@
         dest: /tmp/install-k3s.sh
         mode: '0755'
 
-    - name: Install K3s on Control Plane with Traefik Disabled
-      command: sh /tmp/install-k3s.sh --disable traefik
+    - name: Install K3s on Control Plane
+      command: sh /tmp/install-k3s.sh
       when: inventory_hostname in groups['k3s_control']
       register: k3s_installation
 
