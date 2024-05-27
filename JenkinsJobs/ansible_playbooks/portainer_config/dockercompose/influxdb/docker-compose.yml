@@ -25,6 +25,7 @@ services:
         - "traefik.http.routers.influxdb.entrypoints=web"
         - "traefik.http.routers.influxdb.middlewares=influxdb-stripprefix"
         - "traefik.http.middlewares.influxdb-stripprefix.stripprefix.prefixes=/influxdb"
+        - "serviceName=influxdb"
 volumes:
   influxdb-storage:
 networks:
