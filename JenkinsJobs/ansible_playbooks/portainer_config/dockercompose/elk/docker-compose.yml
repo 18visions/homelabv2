@@ -18,6 +18,7 @@ services:
       - elasticsearch
     ports:
       - 12201:12201/udp
+      - 5044:5044 
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro 
     networks:
