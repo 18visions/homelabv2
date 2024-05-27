@@ -12,11 +12,11 @@ services:
         - INFLUXDB_DB=db0
         - INFLUXDB_ADMIN_USER=influxdbuser
         - INFLUXDB_ADMIN_PASSWORD=influxdbpassword
+        - SERVICE_NAME=influxdb
       logging:
         driver: gelf
         options:
           gelf-address: "udp://localhost:12201" # Logstash UDP input port
-          labels: "serviceName=influxdb"
           tag: "influxdb"
       restart: always
       labels:
@@ -26,7 +26,6 @@ services:
         - "traefik.http.routers.influxdb.entrypoints=web"
         - "traefik.http.routers.influxdb.middlewares=influxdb-stripprefix"
         - "traefik.http.middlewares.influxdb-stripprefix.stripprefix.prefixes=/influxdb"
-        - "serviceName=influxdb"
 volumes:
   influxdb-storage:
 networks:
