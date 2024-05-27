@@ -18,7 +18,8 @@ services:
         options:
           gelf-address: "udp://localhost:12201" # Logstash UDP input port
           tag: "influxdb"
-          labels: "_serviceName=influxdb"
+          labels: "serviceName,environment"
+          env: "SERVICE_NAME,ENVIRONMENT"
       restart: always
       labels:
         - "traefik.enable=true"
@@ -27,6 +28,8 @@ services:
         - "traefik.http.routers.influxdb.entrypoints=web"
         - "traefik.http.routers.influxdb.middlewares=influxdb-stripprefix"
         - "traefik.http.middlewares.influxdb-stripprefix.stripprefix.prefixes=/influxdb"
+        - "serviceName=influxdb"  # Custom label
+        - "environment=production"  # Custom label
 volumes:
   influxdb-storage:
 networks:
