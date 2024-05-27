@@ -23,6 +23,11 @@ services:
     networks:
       - homelab
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.udp.routers.logstash.rule=Host(`logstash.homelab.local`)"
+      - "traefik.udp.services.logstash.loadbalancer.server.port=12201"
+      - "traefik.udp.routers.logstash.entrypoints=udp"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.10
