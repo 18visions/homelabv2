@@ -18,6 +18,7 @@ services:
         options:
           gelf-address: "udp://localhost:12201" # Logstash UDP input port
           tag: "influxdb"
+          labels: "serviceName=influxdb"
       restart: always
       labels:
         - "traefik.enable=true"
