@@ -44,6 +44,7 @@
         - openproject
         - blackbox-exporter
         - homarr
+        - plane
 
     - name: Export the directories for NFS access
       blockinfile:
@@ -59,6 +60,7 @@
           /exports/openproject *(rw,sync,no_subtree_check,no_root_squash)
           /exports/blackbox-exporter *(rw,sync,no_subtree_check,no_root_squash)
           /exports/homarr *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/plane *(rw,sync,no_subtree_check,no_root_squash)
         create: yes
         backup: yes
 
