@@ -45,6 +45,7 @@
         - blackbox-exporter
         - homarr
         - plane
+        - postgres
 
     - name: Export the directories for NFS access
       blockinfile:
@@ -61,6 +62,7 @@
           /exports/blackbox-exporter *(rw,sync,no_subtree_check,no_root_squash)
           /exports/homarr *(rw,sync,no_subtree_check,no_root_squash)
           /exports/plane *(rw,sync,no_subtree_check,no_root_squash)
+          /exports/postgres *(rw,sync,no_subtree_check,no_root_squash)
         create: yes
         backup: yes
 
