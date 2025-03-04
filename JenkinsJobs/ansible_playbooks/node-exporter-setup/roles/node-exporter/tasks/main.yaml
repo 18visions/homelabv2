@@ -10,51 +10,62 @@
     system: true
     create_home: false
 
+- name: Determine system architecture
+  ansible.builtin.set_fact:
+    node_exporter_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' if ansible_architecture == 'aarch64' else 'unsupported' }}"
+
+- name: Fail if architecture is unsupported
+  ansible.builtin.fail:
+    msg: "Unsupported architecture: {{ ansible_architecture }}"
+  when: node_exporter_arch == "unsupported"
+
+- name: Define node_exporter package URL
+  ansible.builtin.set_fact:
+    node_exporter_url: "https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-{{ node_exporter_arch }}.tar.gz"
+
 - name: Check if node exporter already in /usr/local/bin
-  stat: path=/usr/local/bin/node_exporter
+  stat: 
+    path: /usr/local/bin/node_exporter
   register: node_exporter_stat
 
 - name: Download node exporter package
   ansible.builtin.get_url:
-    url: https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
-    dest: /tmp
+    url: "{{ node_exporter_url }}"
+    dest: /tmp/node_exporter-1.6.1.linux-{{ node_exporter_arch }}.tar.gz
     force: false
   when: not node_exporter_stat.stat.exists
 
-- name: Extract node_exporter-1.6.1.linux-amd64.tar.gz into /tmp
+- name: Extract node_exporter into /tmp
   ansible.builtin.unarchive:
     remote_src: true
-    src: /tmp/node_exporter-1.6.1.linux-amd64.tar.gz
+    src: "/tmp/node_exporter-1.6.1.linux-{{ node_exporter_arch }}.tar.gz"
     dest: /tmp/
   when: not node_exporter_stat.stat.exists
 
 - name: Move node_exporter to /usr/local/bin
-  command: mv /tmp/node_exporter-1.6.1.linux-amd64/node_exporter /usr/local/bin/
+  command: mv "/tmp/node_exporter-1.6.1.linux-{{ node_exporter_arch }}/node_exporter" /usr/local/bin/
   when: not node_exporter_stat.stat.exists
 
-#- name: Copy node exporter dir with owner and permissions
-#  ansible.builtin.copy:
-#    remote_src: true
-#    src: /tmp/node_exporter-1.6.1.linux-amd64/node_exporter/
-#    dest: /usr/local/bin/
-#    owner: node_exporter
-#    group: node_exporter
-#    mode: '0644'
+- name: Set correct ownership and permissions
+  ansible.builtin.file:
+    path: /usr/local/bin/node_exporter
+    owner: node_exporter
+    group: node_exporter
+    mode: '0755'
 
-- name: Check if service file exists
-  stat: path=/tmp/node_exporter-1.6.1.linux-amd64/node_exporter
-  register: node_exporter_service_stat
-
-- name: Copy file with owner and permissions
+- name: Copy systemd service file
   ansible.builtin.copy:
     src: node_exporter.service
-    dest: /etc/systemd/system/
+    dest: /etc/systemd/system/node_exporter.service
     owner: node_exporter
     group: node_exporter
     mode: '0644'
-  when: not node_exporter_service_stat.stat.exists
 
-- name: Start service node, if not started and enable
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Start and enable node_exporter service
   ansible.builtin.service:
     name: node_exporter
     state: started
