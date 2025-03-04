@@ -21,7 +21,7 @@
 
 - name: Define node_exporter package URL
   ansible.builtin.set_fact:
-    node_exporter_url: "https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-{{ node_exporter_arch }}.tar.gz"
+    node_exporter_url: "https://github.com/prometheus/node_exporter/releases/download/v1.9.0/node_exporter-1.9.0.linux-{{ node_exporter_arch }}.tar.gz"
 
 - name: Check if node exporter already in /usr/local/bin
   stat: 
@@ -31,19 +31,19 @@
 - name: Download node exporter package
   ansible.builtin.get_url:
     url: "{{ node_exporter_url }}"
-    dest: /tmp/node_exporter-1.6.1.linux-{{ node_exporter_arch }}.tar.gz
+    dest: /tmp/node_exporter-1.9.0.linux-{{ node_exporter_arch }}.tar.gz
     force: false
   when: not node_exporter_stat.stat.exists
 
 - name: Extract node_exporter into /tmp
   ansible.builtin.unarchive:
     remote_src: true
-    src: "/tmp/node_exporter-1.6.1.linux-{{ node_exporter_arch }}.tar.gz"
+    src: "/tmp/node_exporter-1.9.0.linux-{{ node_exporter_arch }}.tar.gz"
     dest: /tmp/
   when: not node_exporter_stat.stat.exists
 
 - name: Move node_exporter to /usr/local/bin
-  command: mv "/tmp/node_exporter-1.6.1.linux-{{ node_exporter_arch }}/node_exporter" /usr/local/bin/
+  command: mv "/tmp/node_exporter-1.9.0.linux-{{ node_exporter_arch }}/node_exporter" /usr/local/bin/
   when: not node_exporter_stat.stat.exists
 
 - name: Set correct ownership and permissions
