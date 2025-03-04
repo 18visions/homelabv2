@@ -5,6 +5,16 @@
   become_method: sudo
 
   tasks:
+    - name: Check user privileges before upgrading
+      ansible.builtin.command: "whoami"
+      register: user_check
+      changed_when: false
+      become: yes
+
+    - name: Show user executing tasks
+      ansible.builtin.debug:
+        msg: "Running as user: {{ user_check.stdout }}"
+
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
