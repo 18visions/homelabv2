@@ -2,6 +2,7 @@
 - name: Install node exporter service
   hosts: all
   become: yes
-
+  become_method: sudo  # Explicitly set sudo
+  become_user: root  # Run as root
   roles:
     - node-exporter
