@@ -2,35 +2,22 @@
 - name: Install common tools
   hosts: all
   become: yes
-  become_method: sudo
+  become_method: sudo  # 🔹 Force use of sudo
 
   tasks:
-    - name: Check user privileges before upgrading
-      ansible.builtin.command: "whoami"
-      register: user_check
-      changed_when: false
-      become: yes
-
-    - name: Show user executing tasks
-      ansible.builtin.debug:
-        msg: "Running as user: {{ user_check.stdout }}"
-
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 3600
-      become: yes  # Explicitly add this
-
-    - name: Wait for APT lock to be released (just in case)
-      ansible.builtin.shell: "while sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 1; done"
-      changed_when: false
       become: yes
+      become_method: sudo  # 🔹 Force sudo at task level
 
     - name: Upgrade all packages
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
-      become: yes  # Explicitly add this
+      become: yes
+      become_method: sudo  # 🔹 Force sudo at task level
 
     - name: Install packages
       ansible.builtin.apt:
@@ -41,4 +28,5 @@
           - python3-pip
           - curl
         state: present
-      become: yes  # Explicitly add this
+      become: yes
+      become_method: sudo  # 🔹 Force sudo at task level
