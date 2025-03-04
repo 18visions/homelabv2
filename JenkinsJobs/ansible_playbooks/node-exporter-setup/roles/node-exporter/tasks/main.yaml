@@ -9,6 +9,7 @@
     group: node_exporter
     system: true
     create_home: false
+  become: yes  # Ensures privilege escalation
 
 - name: Determine system architecture
   ansible.builtin.set_fact:
