@@ -7,12 +7,14 @@
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
-        cache_valid_time: 3600  # Cache validity in seconds
+        cache_valid_time: 3600
+      become: yes  # Explicitly add this
 
     - name: Upgrade all packages
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
+      become: yes  # Explicitly add this
 
     - name: Install packages
       ansible.builtin.apt:
@@ -23,3 +25,4 @@
           - python3-pip
           - curl
         state: present
+      become: yes  # Explicitly add this
