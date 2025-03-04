@@ -2,6 +2,7 @@
 - name: Install common tools
   hosts: all
   become: yes
+  become_method: sudo
 
   tasks:
     - name: Update apt cache
