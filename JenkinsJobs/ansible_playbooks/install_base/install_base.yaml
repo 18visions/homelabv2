@@ -2,23 +2,19 @@
 - name: Install common tools
   hosts: all
   become: yes
-  become_method: sudo  # Explicitly set sudo
-  become_user: root  # Run as root
+  become_method: sudo
+  become_user: root
 
   tasks:
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 3600
-      become: yes
-      become_method: sudo  # 🔹 Force sudo at task level
 
     - name: Upgrade all packages
       ansible.builtin.apt:
         upgrade: dist
         update_cache: yes
-      become: yes
-      become_method: sudo  # 🔹 Force sudo at task level
 
     - name: Install packages
       ansible.builtin.apt:
@@ -28,6 +24,11 @@
           - htop
           - python3-pip
           - curl
+          - qemu-guest-agent
         state: present
-      become: yes
-      become_method: sudo  # 🔹 Force sudo at task level
+
+    - name: Ensure qemu-guest-agent is enabled and running
+      ansible.builtin.systemd:
+        name: qemu-guest-agent
+        enabled: yes
+        state: started
